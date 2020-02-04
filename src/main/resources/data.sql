@@ -1,0 +1,2 @@
+INSERT INTO TESTE(A, B) VALUES (0, 'apple');
+INSERT INTO TESTE(A, B) VALUES (1, 'banana');
