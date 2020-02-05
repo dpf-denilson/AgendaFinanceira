@@ -1,14 +1,14 @@
 package com.candidato.agendafinanceira;
 
+import com.candidato.agendafinanceira.entities.Agendamento;
+import com.candidato.agendafinanceira.models.ModelAgendamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @RestController
 public class AgendaController {
@@ -16,27 +16,36 @@ public class AgendaController {
     @Autowired
     private ApplicationContext context;
 
+    @Autowired
+    private AgendamentoRepository repo;
+
+    public AgendaController() {
+    }
+
     @GetMapping("/")
     public String index() {
         return "Você requisitou um GET!";
     }
 
     @PostMapping("/")
-    public String teste() {
-        IDBHandler dbh = (IDBHandler)context.getBean("DBHandler");
-        try {
-            ResultSet result = dbh.runQuery("SELECT * FROM TESTE");
-            String msg = "";
-            while (result.next()) {
-                for (int i = 0; i < 2; i++) {
-                    msg += result.getString(i) + ", ";
-                }
-                msg += "\n";
-            }
-            return "Ok!\n" + msg;
-        } catch (SQLException ex) {
-            return ex.getMessage();
+    public String api(@RequestBody ModelAgendamento agendamento) {
+        String resp = "";
+
+        if (agendamento.getcOrigem().length() != 6) {
+            // FIXME https://www.baeldung.com/spring-mvc-controller-custom-http-status-code
         }
+
+        repo.save(new Agendamento(agendamento.getcOrigem(),
+                agendamento.getcDestino(),
+                BigDecimal.valueOf(agendamento.getvTransf()),
+                BigDecimal.valueOf(5.25),
+                agendamento.getDtEfeito())
+        );
+
+        for (Agendamento agd : repo.findAll()) {
+            resp += agd.toString() + "\n";
+        }
+        return resp;
     }
 
 

@@ -1,10 +1,9 @@
 package com.candidato.agendafinanceira;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import com.candidato.agendafinanceira.entities.Agendamento;
 
 public interface IAgenda {
 
-    void AgendarTransf(IAgendamento agendamento) throws AgendaException;
+    void AgendarTransf(Agendamento agendamento) throws AgendaException;
 
 }

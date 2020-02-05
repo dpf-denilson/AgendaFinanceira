@@ -1,4 +1,12 @@
 package com.candidato.agendafinanceira;
 
-public class Agenda {
+import com.candidato.agendafinanceira.entities.Agendamento;
+
+public class Agenda implements IAgenda {
+
+    @Override
+    public void AgendarTransf(Agendamento agendamento) throws AgendaException {
+
+    }
+
 }
