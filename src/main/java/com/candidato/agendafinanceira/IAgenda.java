@@ -2,8 +2,11 @@ package com.candidato.agendafinanceira;
 
 import com.candidato.agendafinanceira.entities.Agendamento;
 
+import java.util.List;
+
 public interface IAgenda {
 
-    void AgendarTransf(Agendamento agendamento) throws AgendaException;
+    void agendar(Agendamento agendamento) throws AgendaException;
+    List<Agendamento> listar();
 
 }

@@ -6,6 +6,6 @@ import java.math.BigDecimal;
 
 public interface ITaxaLogic {
 
-    public BigDecimal calculaTaxa(Agendamento agendamento);
+    public BigDecimal calculaTaxa(Agendamento agendamento) throws AgendaException;
 
 }

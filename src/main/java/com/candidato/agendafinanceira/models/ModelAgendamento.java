@@ -1,18 +1,14 @@
 package com.candidato.agendafinanceira.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
 public class ModelAgendamento {
     private String cOrigem;
     private String cDestino;
     private Float vTransf;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = JsonFormat.DEFAULT_TIMEZONE)
-    private LocalDateTime dtEfeito;
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = JsonFormat.DEFAULT_TIMEZONE)
+    private LocalDate dtEfeito;
 
     public ModelAgendamento() {
     }
@@ -47,11 +43,11 @@ public class ModelAgendamento {
         this.vTransf = vTransf;
     }
 
-    public LocalDateTime getDtEfeito() {
+    public LocalDate getDtEfeito() {
         return dtEfeito;
     }
 
-    public void setDtEfeito(LocalDateTime dtEfeito) {
+    public void setDtEfeito(LocalDate dtEfeito) {
         this.dtEfeito = dtEfeito;
     }
 }

@@ -1,52 +1,67 @@
 package com.candidato.agendafinanceira;
 
 import com.candidato.agendafinanceira.entities.Agendamento;
-import com.candidato.agendafinanceira.models.ModelAgendamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-@RestController
+@Controller
 public class AgendaController {
 
     @Autowired
     private ApplicationContext context;
 
     @Autowired
-    private AgendamentoRepository repo;
+    private IAgenda agenda;
+
+    @Autowired
+    private ITaxaLogic logica;
 
     public AgendaController() {
     }
 
-    @GetMapping("/")
-    public String index() {
-        return "Você requisitou um GET!";
+    @GetMapping({"/add-agendamento", "/"})
+    public String showSignUpForm(Model model) {
+        Agendamento agd = new Agendamento();
+        //Define valores padrão para facilitar digitação no form do Thymeleaf
+        agd.setcOrigem("000000");
+        agd.setcDestino("000000");
+        agd.setDtEfeito(LocalDate.now());
+        agd.setvTransf(BigDecimal.valueOf(100.00));
+
+        model.addAttribute("agendamento", agd);
+        return "add-agendamento";
     }
 
-    @PostMapping("/")
-    public String api(@RequestBody ModelAgendamento agendamento) {
-        String resp = "";
+    @PostMapping("/agendar")
+    public String agendarEndpoint(@Valid Agendamento agendamento, BindingResult result, Model model) {
+        List<String> erros = new ArrayList<String>();
+        try {
+            if (result.hasErrors()) {
+                erros.add("Erro ao interpretar dados.");
+            }
+            agendamento.setDtInclusao(LocalDate.now());
+            agendamento.setvTaxa(logica.calculaTaxa(agendamento));
+            agenda.agendar(agendamento);
 
-        if (agendamento.getcOrigem().length() != 6) {
-            // FIXME https://www.baeldung.com/spring-mvc-controller-custom-http-status-code
+            model.addAttribute("agendamentos", agenda.listar());
+        } catch (AgendaException ex) {
+            erros.add("Erro ao gerar agendamento - " + ex.getMessage());
         }
-
-        repo.save(new Agendamento(agendamento.getcOrigem(),
-                agendamento.getcDestino(),
-                BigDecimal.valueOf(agendamento.getvTransf()),
-                BigDecimal.valueOf(5.25),
-                agendamento.getDtEfeito())
-        );
-
-        for (Agendamento agd : repo.findAll()) {
-            resp += agd.toString() + "\n";
+        if (erros.size() > 0) {
+            model.addAttribute("erros", erros);
         }
-        return resp;
+        return "add-agendamento";
     }
-
 
 }

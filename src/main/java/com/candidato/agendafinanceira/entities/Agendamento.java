@@ -1,8 +1,14 @@
 package com.candidato.agendafinanceira.entities;
 
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Entity
@@ -13,33 +19,35 @@ public class Agendamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+    @NotBlank(message = "Necessário informar conta de origem")
+    @Length(max = 6, min = 6, message = "Formato de conta de origem inválido")
     @Column(nullable = false, length = 6)
     private String cOrigem;
+    @NotBlank(message = "Necessário informar conta de destino")
+    @Length(max = 6, min = 6, message = "Formato de conta destino inválido")
     @Column(nullable = false, length = 6)
     private String cDestino;
+    @DecimalMin(value = "0.01", message = "Valor transferência não deve ser inferior a um centavo")
     @Column(nullable = false)
     private BigDecimal vTransf;
+    @PositiveOrZero(message = "Valor taxa não deve ser negativo")
     @Column(nullable = false)
     private BigDecimal vTaxa;
     @Column(nullable = false)
-    private LocalDateTime dtInclusao;
+    private LocalDate dtInclusao;
     @Column(nullable = false)
-    private LocalDateTime dtEfeito;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dtEfeito;
 
     public Agendamento() {
     }
 
-    public Agendamento(String cOrigem, String cDestino, BigDecimal vTransf, BigDecimal vTaxa, LocalDateTime dtEfeito) {
-        assert(cOrigem.length() == 6);
-        assert(cDestino.length() == 6);
-        assert(vTransf.compareTo(BigDecimal.ZERO) > 0);
-        assert(dtEfeito.isAfter(LocalDateTime.now()));
-
+    public Agendamento(String cOrigem, String cDestino, BigDecimal vTransf, BigDecimal vTaxa, LocalDate dtEfeito) {
         this.cOrigem = cOrigem;
         this.cDestino = cDestino;
         this.vTransf = vTransf;
         this.vTaxa = vTaxa;
-        this.dtInclusao = LocalDateTime.now();
+        this.dtInclusao = LocalDate.now();
         this.dtEfeito = dtEfeito;
     }
 
@@ -83,25 +91,25 @@ public class Agendamento {
         this.vTaxa = vTaxa;
     }
 
-    public LocalDateTime getDtInclusao() {
+    public LocalDate getDtInclusao() {
         return dtInclusao;
     }
 
-    public void setDtInclusao(LocalDateTime dtInclusao) {
+    public void setDtInclusao(LocalDate dtInclusao) {
         this.dtInclusao = dtInclusao;
     }
 
-    public LocalDateTime getDtEfeito() {
+    public LocalDate getDtEfeito() {
         return dtEfeito;
     }
 
-    public void setDtEfeito(LocalDateTime dtEfeito) {
+    public void setDtEfeito(LocalDate dtEfeito) {
         this.dtEfeito = dtEfeito;
     }
 
     @Override
     public String toString() {
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return  "CO: " + this.cOrigem +
                 " / CD: " + this.cDestino +
                 " / DTI: " + this.dtInclusao.format(fmt) +

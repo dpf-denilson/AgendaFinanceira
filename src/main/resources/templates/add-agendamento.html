@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="#" th:action="@{/agendar}" th:object="${agendamento}" method="post">
+    <label for="cOrigem">Conta Origem</label>
+    <input type="text" th:field="*{cOrigem}" id="cOrigem" placeholder="000000">
+    <span th:if="${#fields.hasErrors('cOrigem')}" th:errors="*{cOrigem}"></span>
+    <label for="cDestino">Conta Destino</label>
+    <input type="text" th:field="*{cDestino}" id="cDestino" placeholder="000000">
+    <span th:if="${#fields.hasErrors('cDestino')}" th:errors="*{cDestino}"></span>
+    <label for="vTransf">Valor da Transferência</label>
+    <input type="number" step="0.01" th:field="*{vTransf}" id="vTransf" placeholder="1.00">
+    <span th:if="${#fields.hasErrors('vTransf')}" th:errors="*{vTransf}"></span>
+    <label for="dtEfeito">Data Agendamento</label>
+    <input type="date" th:field="*{dtEfeito}" id="dtEfeito" placeholder="YYYY-MM-DD">
+    <span th:if="${#fields.hasErrors('dtEfeito')}" th:errors="*{dtEfeito}"></span>
+    <input type="submit" value="Agendar">
+    </form>
+    <div th:switch="${agendamentos}">
+        <h2 th:case="null">Nenhum agendamento</h2>
+        <div th:case="*">
+            <h2>Agendamentos</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>C. Origem</th>
+                    <th>C. Destino</th>
+                    <th>Vlr. Transf.</th>
+                    <th>Vlr. Taxa</th>
+                    <th>Dt. Inclusão</th>
+                    <th>Dt. Agendamento</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="agd : ${agendamentos}">
+                    <td th:text="${agd.cOrigem}"></td>
+                    <td th:text="${agd.cDestino}"></td>
+                    <td th:text="${agd.vTransf}"></td>
+                    <td th:text="${agd.vTaxa}"></td>
+                    <td th:text="${agd.dtInclusao}"></td>
+                    <td th:text="${agd.dtEfeito}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div th:switch="${erros}">
+        <h2 th:case="null"><!-- Nenhum erro --></h2>
+        <div th:case="*">
+            <h2>Erros</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Erro</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="erro : ${erros}">
+                    <td th:text="${erro.toString()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
