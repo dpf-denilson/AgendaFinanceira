@@ -2,26 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Agenda Financeira</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/mini.css}" />
 </head>
 <body>
-    <form action="#" th:action="@{/agendar}" th:object="${agendamento}" method="post">
+    <h1>Agenda Financeira</h1>
+    <form action="#" th:action="@{/agendar}" th:object="${modelAgendamento}" method="post">
     <label for="cOrigem">Conta Origem</label>
     <input type="text" th:field="*{cOrigem}" id="cOrigem" placeholder="000000">
-    <span th:if="${#fields.hasErrors('cOrigem')}" th:errors="*{cOrigem}"></span>
+    <mark class="secondary" th:if="${#fields.hasErrors('cOrigem')}" th:errors="*{cOrigem}"></mark>
     <label for="cDestino">Conta Destino</label>
     <input type="text" th:field="*{cDestino}" id="cDestino" placeholder="000000">
-    <span th:if="${#fields.hasErrors('cDestino')}" th:errors="*{cDestino}"></span>
+    <mark class="secondary" th:if="${#fields.hasErrors('cDestino')}" th:errors="*{cDestino}"></mark>
     <label for="vTransf">Valor da Transferência</label>
-    <input type="number" step="0.01" th:field="*{vTransf}" id="vTransf" placeholder="1.00">
-    <span th:if="${#fields.hasErrors('vTransf')}" th:errors="*{vTransf}"></span>
+    <input type="number" step="0.01" th:field="*{vTransf}" id="vTransf" placeholder="1.00" max="999999999.99">
+    <mark class="secondary" th:if="${#fields.hasErrors('vTransf')}" th:errors="*{vTransf}"></mark>
     <label for="dtEfeito">Data Agendamento</label>
-    <input type="date" th:field="*{dtEfeito}" id="dtEfeito" placeholder="YYYY-MM-DD">
-    <span th:if="${#fields.hasErrors('dtEfeito')}" th:errors="*{dtEfeito}"></span>
+    <input type="date" th:field="*{dtEfeito}" id="dtEfeito" placeholder="yyyy-MM-dd">
+    <mark class="secondary" th:if="${#fields.hasErrors('dtEfeito')}" th:errors="*{dtEfeito}"></mark>
     <input type="submit" value="Agendar">
     </form>
     <div th:switch="${agendamentos}">
-        <h2 th:case="null">Nenhum agendamento</h2>
+        <span class="toast" th:case="null">Nenhum agendamento</span>
         <div th:case="*">
             <h2>Agendamentos</h2>
             <table>

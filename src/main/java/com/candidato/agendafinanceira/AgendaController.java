@@ -1,6 +1,7 @@
 package com.candidato.agendafinanceira;
 
 import com.candidato.agendafinanceira.entities.Agendamento;
+import com.candidato.agendafinanceira.models.ModelAgendamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -22,39 +23,47 @@ public class AgendaController {
     private ApplicationContext context;
 
     @Autowired
-    private IAgenda agenda;
-
-    @Autowired
-    private ITaxaLogic logica;
+    private IAgendaService agenda;
 
     public AgendaController() {
     }
 
-    @GetMapping({"/add-agendamento", "/"})
+    private Agendamento converteModel(ModelAgendamento model) {
+        return new Agendamento(model.getcOrigem(),
+                model.getcDestino(),
+                BigDecimal.valueOf(model.getvTransf()),
+                BigDecimal.ZERO,
+                model.getDtEfeito());
+    }
+
+    @GetMapping({"/add-agendamento", "/", "/error", "/agendar"})
     public String showSignUpForm(Model model) {
         Agendamento agd = new Agendamento();
         //Define valores padrão para facilitar digitação no form do Thymeleaf
         agd.setcOrigem("000000");
         agd.setcDestino("000000");
+        agd.setDtInclusao(LocalDate.now()); ;
         agd.setDtEfeito(LocalDate.now());
-        agd.setvTransf(BigDecimal.valueOf(100.00));
+        agd.setvTransf(BigDecimal.valueOf(101.00));
+        agd.setvTaxa(BigDecimal.ZERO);
 
-        model.addAttribute("agendamento", agd);
+        model.addAttribute("modelAgendamento", agd);
         return "add-agendamento";
     }
 
     @PostMapping("/agendar")
-    public String agendarEndpoint(@Valid Agendamento agendamento, BindingResult result, Model model) {
+    public String agendarEndpoint(@Valid ModelAgendamento modelAgendamento, BindingResult result, Model model) {
         List<String> erros = new ArrayList<String>();
         try {
             if (result.hasErrors()) {
                 erros.add("Erro ao interpretar dados.");
-            }
-            agendamento.setDtInclusao(LocalDate.now());
-            agendamento.setvTaxa(logica.calculaTaxa(agendamento));
-            agenda.agendar(agendamento);
+            } else {
+                Agendamento agendamento = converteModel(modelAgendamento);
+                agendamento.setDtInclusao(LocalDate.now());
+                agenda.agendar(agendamento);
 
-            model.addAttribute("agendamentos", agenda.listar());
+                model.addAttribute("agendamentos", agenda.listar());
+            }
         } catch (AgendaException ex) {
             erros.add("Erro ao gerar agendamento - " + ex.getMessage());
         }

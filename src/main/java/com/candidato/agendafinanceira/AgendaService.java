@@ -2,30 +2,24 @@ package com.candidato.agendafinanceira;
 
 import com.candidato.agendafinanceira.entities.Agendamento;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Agenda implements IAgenda {
+@Service
+public class AgendaService implements IAgendaService {
 
     @Autowired
     private AgendamentoRepository repo;
 
-    private boolean validaConta(String conta) {
-        return conta.length() != 6;
-    }
+    @Autowired
+    private ITaxaLogic logica;
 
     @Override
     public void agendar(Agendamento agendamento) throws AgendaException {
-        if (validaConta(agendamento.getcOrigem())) {
-            throw new AgendaException("Conta origem inválida.");
-        }
-
-        if (validaConta(agendamento.getcDestino())) {
-            throw new AgendaException("Conta destino inválida.");
-        }
 
         if (agendamento.getcOrigem().equals(agendamento.getcDestino())) {
             throw new AgendaException("Conta de origem e destino não podem ser as mesmas.");
@@ -38,6 +32,8 @@ public class Agenda implements IAgenda {
         if (agendamento.getDtEfeito().isBefore(LocalDate.now())) {
             throw new AgendaException("Data de agendamento inválida.");
         }
+
+        agendamento.setvTaxa(logica.calculaTaxa(agendamento));
 
         repo.save(agendamento);
     }

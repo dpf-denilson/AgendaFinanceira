@@ -1,12 +1,9 @@
 package com.candidato.agendafinanceira.entities;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,24 +16,23 @@ public class Agendamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    @NotBlank(message = "Necessário informar conta de origem")
-    @Length(max = 6, min = 6, message = "Formato de conta de origem inválido")
+    @Length(max = 6, min = 6)
     @Column(nullable = false, length = 6)
     private String cOrigem;
-    @NotBlank(message = "Necessário informar conta de destino")
-    @Length(max = 6, min = 6, message = "Formato de conta destino inválido")
+    @Length(max = 6, min = 6)
     @Column(nullable = false, length = 6)
     private String cDestino;
-    @DecimalMin(value = "0.01", message = "Valor transferência não deve ser inferior a um centavo")
+    @DecimalMin(value = "0.01")
     @Column(nullable = false)
     private BigDecimal vTransf;
-    @PositiveOrZero(message = "Valor taxa não deve ser negativo")
+    @Positive
     @Column(nullable = false)
     private BigDecimal vTaxa;
+    @PastOrPresent
     @Column(nullable = false)
     private LocalDate dtInclusao;
+    @Future
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dtEfeito;
 
     public Agendamento() {

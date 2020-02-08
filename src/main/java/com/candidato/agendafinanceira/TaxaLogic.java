@@ -1,10 +1,11 @@
 package com.candidato.agendafinanceira;
 
 import com.candidato.agendafinanceira.entities.Agendamento;
+import org.springframework.stereotype.Service;
+
 import static java.time.temporal.ChronoUnit.DAYS;
 
 import java.math.BigDecimal;
-
 
 public class TaxaLogic implements ITaxaLogic {
 

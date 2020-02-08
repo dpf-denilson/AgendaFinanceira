@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,10 +22,7 @@ public class AgendaControllerApi {
     private ApplicationContext context;
 
     @Autowired
-    private IAgenda agenda;
-
-    @Autowired
-    private ITaxaLogic logica;
+    private IAgendaService agenda;
 
     public AgendaControllerApi() {
     }
@@ -39,7 +37,7 @@ public class AgendaControllerApi {
 
     @PostMapping("/api/agendar")
     @ResponseBody
-    public ResponseEntity agendarAPIEndpoint(@RequestBody ModelAgendamento model, BindingResult result) {
+    public ResponseEntity agendarAPIEndpoint(@Valid @RequestBody ModelAgendamento model, BindingResult result) {
         try {
             if (result.hasErrors()) {
                 throw new AgendaException("Objeto JSON inválido!");
@@ -47,7 +45,6 @@ public class AgendaControllerApi {
 
             Agendamento agendamento = converteModel(model);
             agendamento.setDtInclusao(LocalDate.now());
-            agendamento.setvTaxa(logica.calculaTaxa(agendamento));
             agenda.agendar(agendamento);
             return new ResponseEntity(new Object() {public final boolean resposta = true; }, HttpStatus.CREATED);
         } catch (AgendaException ex) {
