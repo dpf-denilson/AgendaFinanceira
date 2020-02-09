@@ -61,7 +61,7 @@ O projeto é um servidor REST. Possui uma API para comunicação RESTFul via sub
 
 ## Funcionamento
 
-### API
+### API 
 A API possui duas chamadas.
 
 #### /api/agendar
