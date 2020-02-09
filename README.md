@@ -34,7 +34,7 @@ Escolhido pela praticidade, e integração com Spring Boot
 ### H2 Database Engine
 Escolhido pela pertinência ideal aos requisitos do projeto.
 ### Swagger
-Incluído para documentação da API, como diferencial.
+Incluído para documentação da API como diferencial.
 Foi utilizada a versão [3.0.0-SNAPSHOT](http://oss.jfrog.org/artifactory/oss-snapshot-local/) para melhor integração com Spring Boot.
 ### Thymeleaf
 Selecionado para atender os objetivos extendidos da proposta.
@@ -44,20 +44,32 @@ Selecionado para atender os objetivos extendidos da proposta.
 
 ## Arquitetura
 
+O projeto consiste de um servidor REST.
+
+### Pattern
+
+O pattern escolhido foi o MVC pelos benefícios de escalabilidade e integração com demais ferramentas. 
+
 ### Estrutura
-O projeto é um servidor REST. Possui uma API para comunicação RESTFul via subdiretório /api e uma UI ativa diretamente na raiz /. Adicionamente a documentação Swagger pode ser encontrada em /swagger-ui.html e, para via de demonstração, existe visível, o console da base de dados H2 no subdiretório /h2.
+
+Estão incluídos:
+ - API para comunicação RESTFul via subdiretório /api;
+ - UI vinculada diretamente a raiz /;
+ - Documentação Swagger pode ser encontrada em /swagger-ui.html;
+ - Para via de demonstração, o console da base de dados H2 no subdiretório /h2.
 
 ### Decisões
 | Ações | Motivações |
 | --- | --- |
-| Descarte da ideia de comunicação direta com o BD para demonstração de desempenho. | Ganho de agilidade com facilidade encontrada com utilização de JPA (Hibernate) |
+| Descarte da ideia de comunicação direta com o BD para demonstração de desempenho. | Ganho de agilidade com facilidade encontrada com utilização de JPA (Hibernate). |
 | Descarte da classe para logging e controle de strings de erro. | Aprendizado sobre métodos de validação mais práticos via annotations. |
 | Controle de usuários não foi implementado. | Fora do escopo. |
 | Não foram consideradas variações de timezone durante registro dos agendamentos. | Simplificação e objetividade. |
 | Não foram consideradas conversões de moeda. | Fora do escopo, manutenção de objetividade. |
-| Criação de dois Controllers, um para API e outro para UI. | Thymeleaft necessitava de retornos String para indicação de qual recurso carregar. Organização e clareza do código. |
+| Criação de dois Controllers, um para API e outro para UI. | Thymeleaf necessitava de retornos String para indicação de qual recurso carregar. Organização e clareza do código. |
 | Criação de um Model separado do Entity para utilização pelos Controllers. | Segurança (ocultar estruturas internas), adaptabilidade (campos de um Model não necessáriamente representam valores em Entities), modularidade. |
 | Criação de classe abstrata para conversão entre Model e Entity. | Evitar interdependência entre códigos de Model e Entity.|
+| Separação do agendamento e taxação em services independentes. | Modularidade. |
 
 ## Funcionamento
 
@@ -76,3 +88,7 @@ Atende verbos POST. Recebe um agendamento JSON para validação, taxação e arm
 ```
 #### /api/listar
 Lista um array JSON com todos os agendamentos feitos.
+
+### UI
+Contém formulário com quatro campos com as informações pertinentes ao agendamento e um botão para envio do conteúdo dos mesmos para validação e eventual cadastro.
+Abaixo do formulário são listados erros de validação e ao fim da página são listados todos os agendamentos já realizados.
