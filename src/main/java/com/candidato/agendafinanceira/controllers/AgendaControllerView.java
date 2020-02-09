@@ -1,5 +1,8 @@
-package com.candidato.agendafinanceira;
+package com.candidato.agendafinanceira.controllers;
 
+import com.candidato.agendafinanceira.exceptions.AgendaException;
+import com.candidato.agendafinanceira.services.IAgendaService;
+import com.candidato.agendafinanceira.Util;
 import com.candidato.agendafinanceira.entities.Agendamento;
 import com.candidato.agendafinanceira.models.ModelAgendamento;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +14,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class AgendaController {
+public class AgendaControllerView {
 
     @Autowired
     private ApplicationContext context;
@@ -25,27 +27,27 @@ public class AgendaController {
     @Autowired
     private IAgendaService agenda;
 
-    public AgendaController() {
+    private void anexaListagem(Model model) {
+        model.addAttribute("agendamentos", agenda.listar());
+    }
+
+    private void anexaValoresDefault(Model model) {
+        ModelAgendamento agd = new ModelAgendamento();
+
+        //Define valores padrão para facilitar digitação no form do Thymeleaf
+        agd.setcOrigem("000001");
+        agd.setcDestino("000002");
+        agd.setDtEfeito(LocalDate.now());
+        agd.setvTransf(100.00f);
+
+        model.addAttribute("modelAgendamento", agd);
     }
 
     @GetMapping({"/", "/agendar", "/error"})
-    public String retornaParaCadastro() {
-        return "add-agendamento";
-    }
-
-    @GetMapping("/add-agendamento")
     public String showCadastro(Model model) {
-        Agendamento agd = new Agendamento();
-        //Define valores padrão para facilitar digitação no form do Thymeleaf
-        agd.setcOrigem("000000");
-        agd.setcDestino("000000");
-        agd.setDtInclusao(LocalDate.now()); ;
-        agd.setDtEfeito(LocalDate.now());
-        agd.setvTransf(BigDecimal.valueOf(101.00));
-        agd.setvTaxa(BigDecimal.ZERO);
-
-        model.addAttribute("modelAgendamento", agd);
-        return "add-agendamento";
+        anexaValoresDefault(model);
+        anexaListagem(model);
+        return "agendar";
     }
 
     @PostMapping("/agendar")
@@ -58,16 +60,16 @@ public class AgendaController {
                 Agendamento agendamento = Util.converteModel(modelAgendamento);
                 agendamento.setDtInclusao(LocalDate.now());
                 agenda.agendar(agendamento);
-
-                model.addAttribute("agendamentos", agenda.listar());
             }
         } catch (AgendaException ex) {
             erros.add("Erro ao gerar agendamento - " + ex.getMessage());
         }
+
         if (erros.size() > 0) {
             model.addAttribute("erros", erros);
         }
-        return "add-agendamento";
+        anexaListagem(model);
+        return "agendar";
     }
 
 }

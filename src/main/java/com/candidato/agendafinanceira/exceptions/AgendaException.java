@@ -1,4 +1,4 @@
-package com.candidato.agendafinanceira;
+package com.candidato.agendafinanceira.exceptions;
 
 public class AgendaException extends Exception {
 

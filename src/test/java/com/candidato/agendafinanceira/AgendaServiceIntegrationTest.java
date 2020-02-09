@@ -1,6 +1,12 @@
 package com.candidato.agendafinanceira;
 
 import com.candidato.agendafinanceira.entities.Agendamento;
+import com.candidato.agendafinanceira.exceptions.AgendaException;
+import com.candidato.agendafinanceira.repositories.AgendamentoRepository;
+import com.candidato.agendafinanceira.services.AgendaService;
+import com.candidato.agendafinanceira.services.IAgendaService;
+import com.candidato.agendafinanceira.services.ITaxaLogic;
+import com.candidato.agendafinanceira.services.TaxaLogic;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +16,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -31,7 +31,7 @@ public class Agendamento {
     @PastOrPresent
     @Column(nullable = false)
     private LocalDate dtInclusao;
-    @Future
+    @FutureOrPresent
     @Column(nullable = false)
     private LocalDate dtEfeito;
 

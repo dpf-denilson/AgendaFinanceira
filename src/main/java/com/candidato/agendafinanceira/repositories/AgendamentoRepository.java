@@ -1,4 +1,4 @@
-package com.candidato.agendafinanceira;
+package com.candidato.agendafinanceira.repositories;
 
 import com.candidato.agendafinanceira.entities.Agendamento;
 import org.springframework.data.repository.CrudRepository;

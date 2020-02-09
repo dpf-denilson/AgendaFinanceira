@@ -1,6 +1,7 @@
-package com.candidato.agendafinanceira;
+package com.candidato.agendafinanceira.services;
 
 import com.candidato.agendafinanceira.entities.Agendamento;
+import com.candidato.agendafinanceira.exceptions.AgendaException;
 
 import java.util.List;
 

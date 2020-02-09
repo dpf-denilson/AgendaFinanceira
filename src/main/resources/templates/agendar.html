@@ -22,6 +22,26 @@
     <mark class="secondary" th:if="${#fields.hasErrors('dtEfeito')}" th:errors="*{dtEfeito}"></mark>
     <input type="submit" value="Agendar">
     </form>
+    <div th:switch="${erros}">
+        <h2 th:case="null"><!-- Nenhum erro --></h2>
+        <div th:case="*">
+            <div class="card error">
+                <h2>Erros</h2>
+            </div>
+            <table>
+                <thead>
+                <tr>
+                    <th>Erro</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="erro : ${erros}">
+                    <td th:text="${erro.toString()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div th:switch="${agendamentos}">
         <span class="toast" th:case="null">Nenhum agendamento</span>
         <div th:case="*">
@@ -29,6 +49,7 @@
             <table>
                 <thead>
                 <tr>
+                    <th>Id</th>
                     <th>C. Origem</th>
                     <th>C. Destino</th>
                     <th>Vlr. Transf.</th>
@@ -39,30 +60,13 @@
                 </thead>
                 <tbody>
                 <tr th:each="agd : ${agendamentos}">
+                    <td th:text="${agd.id}"></td>
                     <td th:text="${agd.cOrigem}"></td>
                     <td th:text="${agd.cDestino}"></td>
                     <td th:text="${agd.vTransf}"></td>
                     <td th:text="${agd.vTaxa}"></td>
                     <td th:text="${agd.dtInclusao}"></td>
                     <td th:text="${agd.dtEfeito}"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div th:switch="${erros}">
-        <h2 th:case="null"><!-- Nenhum erro --></h2>
-        <div th:case="*">
-            <h2>Erros</h2>
-            <table>
-                <thead>
-                <tr>
-                    <th>Erro</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="erro : ${erros}">
-                    <td th:text="${erro.toString()}"></td>
                 </tr>
                 </tbody>
             </table>

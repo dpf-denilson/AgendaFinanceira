@@ -1,7 +1,7 @@
 package com.candidato.agendafinanceira;
 
 import com.candidato.agendafinanceira.entities.Agendamento;
-import org.aspectj.lang.annotation.Before;
+import com.candidato.agendafinanceira.repositories.AgendamentoRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.util.Assert;
 
 import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;

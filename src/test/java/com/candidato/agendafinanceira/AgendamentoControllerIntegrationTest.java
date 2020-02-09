@@ -1,7 +1,10 @@
 package com.candidato.agendafinanceira;
 
+import com.candidato.agendafinanceira.controllers.AgendaControllerApi;
 import com.candidato.agendafinanceira.entities.Agendamento;
+import com.candidato.agendafinanceira.exceptions.AgendaException;
 import com.candidato.agendafinanceira.models.ModelAgendamento;
+import com.candidato.agendafinanceira.services.IAgendaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.BeforeAll;
@@ -69,7 +72,7 @@ public class AgendamentoControllerIntegrationTest {
     }
 
     @Test
-    public void givenInvalidAgendamento_thenReturnUnable() throws Exception {
+    public void givenInvalidAgendamento_thenReturnNotAcceptable() throws Exception {
         model.setcDestino("1234567");
         realizaAgendamento(model)
                 .andExpect(status().isNotAcceptable());

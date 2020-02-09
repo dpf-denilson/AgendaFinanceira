@@ -1,5 +1,8 @@
-package com.candidato.agendafinanceira;
+package com.candidato.agendafinanceira.controllers;
 
+import com.candidato.agendafinanceira.exceptions.AgendaException;
+import com.candidato.agendafinanceira.services.IAgendaService;
+import com.candidato.agendafinanceira.Util;
 import com.candidato.agendafinanceira.entities.Agendamento;
 import com.candidato.agendafinanceira.models.ModelAgendamento;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,12 +27,9 @@ public class AgendaControllerApi {
     @Autowired
     private IAgendaService agenda;
 
-    public AgendaControllerApi() {
-    }
-
     @PostMapping("/agendar")
     @ResponseBody
-    public ResponseEntity agendarAPIEndpoint(@Valid @RequestBody ModelAgendamento model, BindingResult result) {
+    public ResponseEntity agendarApiEndpoint(@Valid @RequestBody ModelAgendamento model, BindingResult result) {
         try {
             if (result.hasErrors()) {
                 throw new AgendaException("Objeto JSON inválido!");
@@ -46,7 +45,7 @@ public class AgendaControllerApi {
     }
 
     @GetMapping("/listar")
-    public List<Agendamento> listarEndpoint() {
+    public List<Agendamento> listarApiEndpoint() {
         return agenda.listar();
     }
 
