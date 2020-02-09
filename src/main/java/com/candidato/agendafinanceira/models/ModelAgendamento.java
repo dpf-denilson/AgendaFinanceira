@@ -1,5 +1,9 @@
 package com.candidato.agendafinanceira.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,8 +22,10 @@ public class ModelAgendamento {
     @DecimalMin(value = "0.01", message = "Valor transferência não deve ser inferior a um centavo")
     private Float vTransf;
     @NotNull(message = "Necessário informar data de agendamento")
-    @Future(message = "Data de agendamento não pode ser anterior a data atual")
+    @FutureOrPresent(message = "Data de agendamento não pode ser anterior a data atual")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dtEfeito;
 
     public ModelAgendamento() {

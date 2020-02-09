@@ -28,16 +28,13 @@ public class AgendaController {
     public AgendaController() {
     }
 
-    private Agendamento converteModel(ModelAgendamento model) {
-        return new Agendamento(model.getcOrigem(),
-                model.getcDestino(),
-                BigDecimal.valueOf(model.getvTransf()),
-                BigDecimal.ZERO,
-                model.getDtEfeito());
+    @GetMapping({"/", "/agendar", "/error"})
+    public String retornaParaCadastro() {
+        return "add-agendamento";
     }
 
-    @GetMapping({"/add-agendamento", "/", "/error", "/agendar"})
-    public String showSignUpForm(Model model) {
+    @GetMapping("/add-agendamento")
+    public String showCadastro(Model model) {
         Agendamento agd = new Agendamento();
         //Define valores padrão para facilitar digitação no form do Thymeleaf
         agd.setcOrigem("000000");
@@ -58,7 +55,7 @@ public class AgendaController {
             if (result.hasErrors()) {
                 erros.add("Erro ao interpretar dados.");
             } else {
-                Agendamento agendamento = converteModel(modelAgendamento);
+                Agendamento agendamento = Util.converteModel(modelAgendamento);
                 agendamento.setDtInclusao(LocalDate.now());
                 agenda.agendar(agendamento);
 

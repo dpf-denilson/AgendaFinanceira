@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class AgendaControllerApi {
 
     @Autowired
@@ -27,15 +28,7 @@ public class AgendaControllerApi {
     public AgendaControllerApi() {
     }
 
-    private Agendamento converteModel(ModelAgendamento model) {
-        return new Agendamento(model.getcOrigem(),
-                model.getcDestino(),
-                BigDecimal.valueOf(model.getvTransf()),
-                BigDecimal.ZERO,
-                model.getDtEfeito());
-    }
-
-    @PostMapping("/api/agendar")
+    @PostMapping("/agendar")
     @ResponseBody
     public ResponseEntity agendarAPIEndpoint(@Valid @RequestBody ModelAgendamento model, BindingResult result) {
         try {
@@ -43,7 +36,7 @@ public class AgendaControllerApi {
                 throw new AgendaException("Objeto JSON inválido!");
             }
 
-            Agendamento agendamento = converteModel(model);
+            Agendamento agendamento = Util.converteModel(model);
             agendamento.setDtInclusao(LocalDate.now());
             agenda.agendar(agendamento);
             return new ResponseEntity(new Object() {public final boolean resposta = true; }, HttpStatus.CREATED);
@@ -52,7 +45,7 @@ public class AgendaControllerApi {
         }
     }
 
-    @PostMapping("/api/listar")
+    @GetMapping("/listar")
     public List<Agendamento> listarEndpoint() {
         return agenda.listar();
     }
