@@ -90,7 +90,20 @@ Atende verbos POST. Recebe um agendamento JSON para validação, taxação e arm
 }
 ```
 #### /api/listar
-Lista um array JSON com todos os agendamentos feitos.
+Atende a verbos GET. Lista um array JSON com todos os agendamentos feitos.
+```JSON
+[
+    {
+        "id": 1,
+        "cOrigem": "000001",
+        "cDestino": "000002",
+        "vTransf": 100.00,
+        "vTaxa": 8.00,
+        "dtInclusao": "2020-02-10",
+        "dtEfeito": "2020-02-28"
+    }
+]
+```
 
 ### UI
 Contém formulário com quatro campos com as informações pertinentes ao agendamento e um botão para envio do conteúdo dos mesmos, para validação e eventual cadastro.
