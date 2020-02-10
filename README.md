@@ -30,7 +30,7 @@ A versão 13 foi escolhida por ser a versão mais recente disponível.
 ### Spring Boot
 Spring Boot foi utilizado pela praticidade e por ter sido sitado como tecnologia utilizada pela empresa.
 ### Maven
-Escolhido pela praticidade, e integração com Spring Boot
+Escolhido pela praticidade, e integração com Spring Boot.
 ### H2 Database Engine
 Escolhido pela pertinência ideal aos requisitos do projeto.
 ### Swagger
