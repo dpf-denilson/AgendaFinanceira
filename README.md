@@ -16,6 +16,7 @@ Projeto de avaliação. Valida e armazena agendamentos financeiros, seguindo reg
  1. [Tecnologia](#tecnologia)
  2. [Arquitetura](#arquitetura)
  3. [Funcionamento](#funcionamento)
+ 4. [Docker](#docker)
 
 ## Tecnologia
 - [Java 13](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
@@ -28,7 +29,7 @@ Projeto de avaliação. Valida e armazena agendamentos financeiros, seguindo reg
 ### Java 13
 A versão 13 foi escolhida por ser a versão mais recente disponível.
 ### Spring Boot
-Spring Boot foi utilizado pela praticidade e por ter sido sitado como tecnologia utilizada pela empresa.
+Spring Boot foi utilizado pela praticidade e por ter sido citado como tecnologia utilizada pela empresa.
 ### Maven
 Escolhido pela praticidade, e integração com Spring Boot.
 ### H2 Database Engine
@@ -61,17 +62,19 @@ Estão incluídos:
 ### Decisões
 | Ações | Motivações |
 | --- | --- |
-| Descarte da ideia de comunicação direta com o BD para demonstração de desempenho. | Ganho de agilidade com facilidade encontrada com utilização de JPA (Hibernate). |
+| Descarte da ideia de comunicação direta com o BD para demonstração de desempenho. | Ganho de agilidade pela facilidade encontrada na utilização de JPA (Hibernate). |
 | Descarte da classe para logging e controle de strings de erro. | Aprendizado sobre métodos de validação mais práticos via annotations. |
 | Controle de usuários não foi implementado. | Fora do escopo. |
 | Não foram consideradas variações de timezone durante registro dos agendamentos. | Simplificação e objetividade. |
 | Não foram consideradas conversões de moeda. | Fora do escopo, manutenção de objetividade. |
 | Criação de dois Controllers, um para API e outro para UI. | Thymeleaf necessitava de retornos String para indicação de qual recurso carregar. Organização e clareza do código. |
-| Criação de um Model separado do Entity para utilização pelos Controllers. | Segurança (ocultar estruturas internas), adaptabilidade (campos de um Model não necessáriamente representam valores em Entities), modularidade. |
+| Criação de um Model separado do Entity, para utilização pelos Controllers. | Segurança (ocultar estruturas internas), adaptabilidade (campos de um Model não necessáriamente representam valores em Entities), modularidade. |
 | Criação de classe abstrata para conversão entre Model e Entity. | Evitar interdependência entre códigos de Model e Entity.|
 | Separação do agendamento e taxação em services independentes. | Modularidade. |
 
 ## Funcionamento
+
+O servidor se por padrão se atachará à porta 8080.
 
 ### API 
 A API possui duas chamadas.
@@ -90,5 +93,17 @@ Atende verbos POST. Recebe um agendamento JSON para validação, taxação e arm
 Lista um array JSON com todos os agendamentos feitos.
 
 ### UI
-Contém formulário com quatro campos com as informações pertinentes ao agendamento e um botão para envio do conteúdo dos mesmos para validação e eventual cadastro.
+Contém formulário com quatro campos com as informações pertinentes ao agendamento e um botão para envio do conteúdo dos mesmos, para validação e eventual cadastro.
 Abaixo do formulário são listados erros de validação e ao fim da página são listados todos os agendamentos já realizados.
+
+## Docker
+
+Uma imagem docker está disponível:
+```
+docker pull dpfdenilson/agendafinanceira:latest
+```
+
+Execução como:
+```
+docker run -p 8080:8080/tcp dpfdenilson/agendafinanceira:latest
+```
